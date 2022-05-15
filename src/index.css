@@ -26,18 +26,35 @@
     height: 500px;
     position: absolute;
     content: '';
-    bottom: 0;
-    right: 100%;
-    transform: translate(calc(100vw - 100%),  0);
+    bottom: -150px;
+    right: 0;
+    transform: translateX(calc(100vw - 100% + 100px)) scale(0.5);
     background: rgb(78, 19, 101);
     background: -moz-radial-gradient(circle, rgba(78, 19, 101, 1) 0%, rgba(42, 23, 105, 0) 76%);
     background: -webkit-radial-gradient(circle, rgba(78, 19, 101, 1) 0%, rgba(42, 23, 105, 0) 76%);
     background: radial-gradient(circle, rgba(78, 19, 101, 1) 0%, rgba(42, 23, 105, 0) 76%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#4e1365", endColorstr="#2a1769", GradientType=1);
 }
- @media (max-width: 768px) {
+ @media (min-width: 768px) {
     .btn-grad1::after {
-        /* transform: translate(calc(100vw - 125%), -100%); */
+        transform: translate(calc(100vw - 100% - 300px), 0) scale(1);
     }
  }
 
+ @media (min-width: 1240px) {
+    .btn-grad1::after {
+        transform: translate(calc(100vw - 200%), 0) scale(1);
+    }
+ }
+
+ @media (min-width: 1440px) {
+    .btn-grad1::after {
+        transform: translate(calc(100vw - 200% ), 0) scale(1);
+    }
+ }
+
+ @media (min-width: 1690px) {
+    .btn-grad1::after {
+        transform: translate(calc(100vw - 200% - 300px), 0) scale(1);
+    }
+ }
