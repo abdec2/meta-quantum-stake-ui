@@ -12,35 +12,15 @@ const initialState:stateType = {
     }
 }
 
-export type contextType = {
-    data: stateType;
-    updateTokenBalance: (balance: number) => void;
-    updateStakedBalance: (balance: number) => void;
-    updateTokenPrice: (price: number) => void;
-    updateTotalRewards: (rewards: number) => void;
-    updateTotalStaked: (totalStacked: number) => void;
-    updateAccount: (account:string) => void;
-}
-
 export interface layout {
     children: React.ReactNode
 } 
 
-const contextValue:contextType = {
-    data: initialState,
-    updateTokenBalance: (balance: number) => {},
-    updateStakedBalance: (balance: number) => {},
-    updateTokenPrice: (price: number) => {},
-    updateTotalRewards: (rewards: number) => {},
-    updateTotalStaked: (totalStacked: number) => {},
-    updateAccount: (account:string) => {}
-}
 
+export const GlobalContext = createContext(initialState)
 
-export const GlobalContext = createContext<contextType>(contextValue)
-
-export const GlobalProvider = (props: layout) => {
-    const [state, dispatch] = useReducer(AppReducer, contextValue)
+export const GlobalProvider: React.FC<React.ReactNode>  = ({ children }) => {
+    const [state, dispatch] = useReducer(AppReducer, initialState)
     const updateTokenBalance = (balance:number) => {
         dispatch({
             type: 'UPDATE_TOKEN_BALANCE', 
@@ -81,23 +61,22 @@ export const GlobalProvider = (props: layout) => {
             type: 'UPDATE_ACCOUNT',
             payload: account
         })
-        console.log(state)
     }
 
-    const ctxVal:contextType = {
-        ...contextValue,
-        updateTokenBalance,
-        updateStakedBalance,
-        updateTokenPrice,
-        updateTotalRewards,
-        updateTotalStaked, 
-        updateAccount
-    }
 
     return (
-        <GlobalContext.Provider value={ctxVal}
+        <GlobalContext.Provider value={{
+            account: state.account,
+            blockChainData: state.blockChainData,
+            updateTokenBalance,
+            updateStakedBalance,
+            updateTokenPrice,
+            updateTotalRewards,
+            updateTotalStaked, 
+            updateAccount
+        }}
         >
-            {props.children}
+            {children}
         </GlobalContext.Provider>
     )
 }
