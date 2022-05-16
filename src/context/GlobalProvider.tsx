@@ -12,15 +12,35 @@ const initialState:stateType = {
     }
 }
 
+export type contextType = {
+    data: stateType;
+    updateTokenBalance: (balance: number) => void;
+    updateStakedBalance: (balance: number) => void;
+    updateTokenPrice: (price: number) => void;
+    updateTotalRewards: (rewards: number) => void;
+    updateTotalStaked: (totalStacked: number) => void;
+    updateAccount: (account:string) => void;
+}
+
 export interface layout {
     children: React.ReactNode
 } 
 
+const contextValue:contextType = {
+    data: initialState,
+    updateTokenBalance: (balance: number) => {},
+    updateStakedBalance: (balance: number) => {},
+    updateTokenPrice: (price: number) => {},
+    updateTotalRewards: (rewards: number) => {},
+    updateTotalStaked: (totalStacked: number) => {},
+    updateAccount: (account:string) => {}
+}
 
-export const GlobalContext = createContext(initialState)
 
-export const GlobalProvider: React.FC<React.ReactNode>  = ({ children }) => {
-    const [state, dispatch] = useReducer(AppReducer, initialState)
+export const GlobalContext = createContext<contextType>(contextValue)
+
+export const GlobalProvider = (props: layout) => {
+    const [state, dispatch] = useReducer(AppReducer, contextValue)
     const updateTokenBalance = (balance:number) => {
         dispatch({
             type: 'UPDATE_TOKEN_BALANCE', 
@@ -56,27 +76,27 @@ export const GlobalProvider: React.FC<React.ReactNode>  = ({ children }) => {
         })
     }
     const updateAccount = (account:string) => {
-        console.log(account)
         dispatch({
             type: 'UPDATE_ACCOUNT',
             payload: account
         })
+        console.log(state)
     }
 
+    const ctxVal:contextType = {
+        ...state,
+        updateTokenBalance,
+        updateStakedBalance,
+        updateTokenPrice,
+        updateTotalRewards,
+        updateTotalStaked, 
+        updateAccount
+    }
 
     return (
-        <GlobalContext.Provider value={{
-            account: state.account,
-            blockChainData: state.blockChainData,
-            updateTokenBalance,
-            updateStakedBalance,
-            updateTokenPrice,
-            updateTotalRewards,
-            updateTotalStaked, 
-            updateAccount
-        }}
+        <GlobalContext.Provider value={ctxVal}
         >
-            {children}
+            {props.children}
         </GlobalContext.Provider>
     )
 }

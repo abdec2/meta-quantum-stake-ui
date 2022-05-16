@@ -7,15 +7,8 @@ import CONFIG from "./../abi/config";
 
 const Header = () => {
   const context1 = useContext(GlobalContext);
-  console.log(context1)
-  const providerOptions = {
-    /* See Provider Options Section */
-  };
-
   const handleWalletConnect = async () => {
-    const web3Modal = new Web3Modal({
-      providerOptions, // required
-    });
+    const web3Modal = new Web3Modal();
 
     const instance = await web3Modal.connect();
 
@@ -23,12 +16,9 @@ const Header = () => {
     const signer = provider.getSigner();
     const walletaccount = await signer.getAddress();
     context1.updateAccount(walletaccount)
-    console.log(context1)
   };
 
   useEffect(() => {
-    handleWalletConnect()
-    console.log(context1);
   }, []);
 
   return (
